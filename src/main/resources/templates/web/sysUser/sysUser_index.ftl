@@ -40,7 +40,6 @@
                     <option value="">全部</option>
                     <option value="1001">网格员</option>
                     <option value="3000">乡镇管理员</option>
-                    <option value="4000">县级管理员</option>
                     <option value="1007">超级管理员</option>
                   </select>
                 </div>
@@ -232,7 +231,6 @@
         <div class="form-control-static">
           {{#ifEqual roleId 1001}}网格员{{/ifEqual}}
           {{#ifEqual roleId 3000}}乡镇管理员{{/ifEqual}}
-          {{#ifEqual roleId 4000}}县级管理员{{/ifEqual}}
           {{#ifEqual roleId 1007}}超级管理员{{/ifEqual}}
         </div>
       </div>
@@ -299,7 +297,9 @@
            return "";
           }else{
             var areaCodeStr = areaCodeVar.substring(0,9);
-            if(areaCodeStr === "140725200"){
+            if(areaCodeStr === "140882100"){
+              return  "柴家镇";
+            }else if(areaCodeStr === "140725200"){
               return  "平舒乡";
             }else if(areaCodeStr === "140725201"){
               return  "解愁乡";

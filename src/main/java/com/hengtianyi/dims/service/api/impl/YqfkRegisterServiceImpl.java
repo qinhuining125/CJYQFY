@@ -533,7 +533,7 @@ public class YqfkRegisterServiceImpl extends
                 kouan += 1;
             } else if (entity.getIndustray() != null && entity.getIndustray().equals("隔离场所工作人员")) {
                 geli += 1;
-            }else if (entity.getIndustray() != null && entity.getIndustray().equals("入境隔离期满返寿人员")) {
+            }else if (entity.getIndustray() != null && entity.getIndustray().equals("入境隔离期满返乡人员")) {
                 rujin += 1;
             } else if (entity.getIndustray() != null && entity.getIndustray().equals("无业")) {
                 wuye += 1;
