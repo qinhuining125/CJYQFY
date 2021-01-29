@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+ Oracle
+ table name  INCORRUPT_ADVICE
+ remarks     廉政建议
+ author      LY
+-->
+<mapper namespace="com.hengtianyi.dims.service.dao.YqfkRegisterDao">
+
+
+  <!-- doc 查询条件，根据实际情况，对where条件进行删减 -->
+  <sql id="sql_where">
+    <where>
+      <if test="returnWay !=null and returnWay !=''">
+        and "RETURN_WAY" like concat(concat('%', #{returnWay}), '%')
+      </if>
+      <if test="returnCarnum !=null and returnCarnum !=''">
+        and "RETURN_CARNUM" like concat(concat('%', #{returnCarnum}), '%')
+      </if>
+      <if test="areaCode !=null and areaCode !=''">
+        and "AFTER_RETURN_CUBM"  like concat(#{areaCode},'%')
+      </if>
+      <if test="name !=null and name !=''">
+        and "NAME"  like concat(concat('%', #{name}), '%')
+      </if>
+      <if test="createBelZhbm !=null and createBelZhbm !=''">
+        and "CREATE_ACCOUNT" in(select a.id from sys_user a where a.area_code like concat(#{createBelZhbm},'%'))
+      </if>
+      <if test="createBelCubm !=null and createBelCubm !=''">
+        and "CREATE_ACCOUNT" in(select a.id from sys_user a where a.area_code like concat(#{createBelCubm},'%'))
+      </if>
+      <if test="createAccount !=null and createAccount !=''">
+        and "CREATE_ACCOUNT" = (select ID from SYS_USER where USER_NAME=#{createAccount,jdbcType=VARCHAR})
+      </if>
+      <if test="returnState !=null and returnState !=''">
+        and "RETURN_STATE" =#{returnState,jdbcType=VARCHAR}
+      </if>
+      <if test="industray !=null and industray !=''">
+        and "INDUSTRAY" =#{industray,jdbcType=VARCHAR}
+      </if>
+      <if test="isLateStete !=null and isLateStete !=''">
+        and "ISOLATE_STATE" =#{isLateStete,jdbcType=VARCHAR}
+      </if>
+      <if test="localState !=null and localState !=''">
+        and "LOCAL_STATE" =#{localState,jdbcType=VARCHAR}
+      </if>
+      <if test="riskLevel !=null and riskLevel !=''">
+        and "RISK_LEVEL" =#{riskLevel,jdbcType=VARCHAR}
+      </if>
+      <if test="beforeReturnPbm !=null and beforeReturnPbm !=''">
+        and "BEFORE_RETURN_PBM" = #{beforeReturnPbm,jdbcType=VARCHAR}
+      </if>
+      <if test="beforeReturnCbm !=null and beforeReturnCbm !=''">
+        and "BEFORE_RETURN_CBM" = #{beforeReturnCbm,jdbcType=VARCHAR}
+      </if>
+      <if test="beforeReturnXbm !=null and beforeReturnXbm !=''">
+        and "BEFORE_RETURN_XBM" = #{beforeReturnXbm,jdbcType=VARCHAR}
+      </if>
+      <if test="afterReturnZhbm !=null and afterReturnZhbm !=''">
+        and "AFTER_RETURN_ZBM" = #{afterReturnZhbm,jdbcType=VARCHAR}
+      </if>
+      <if test="afterReturnCubm !=null and afterReturnCubm !=''">
+        and "AFTER_RETURN_CUBM" = #{afterReturnCubm,jdbcType=VARCHAR}
+      </if>
+      <if test="startTime !=null and startTime !=''">
+        and "CREATE_TIME" &gt; to_date(#{startTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      <if test="endTime !=null and endTime !=''">
+        and "CREATE_TIME" &lt; to_date(#{endTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      <if test="id !=null and id !=''">
+        and "ID" = #{id,jdbcType=CHAR}
+      </if>
+    </where>
+  </sql>
+
+  <!-- 字段与实体的映射 -->
+  <resultMap id="BaseResultMap" type="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    <id column="ID" property="id" jdbcType="CHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SEX" property="sex" jdbcType="VARCHAR"/>
+    <result column="AGE" property="age" jdbcType="VARCHAR"/>
+    <result column="CARD" property="card" jdbcType="VARCHAR"/>
+    <result column="HJ_PBM" property="hjPbm" jdbcType="VARCHAR"/>
+    <result column="HJ_CBM" property="hjCbm" jdbcType="VARCHAR"/>
+    <result column="HJ_XBM" property="hjXbm" jdbcType="VARCHAR"/>
+    <result column="HJ" property="hj" jdbcType="VARCHAR"/>
+    <result column="SFCZ" property="sfcz" jdbcType="VARCHAR"/>
+    <result column="RELATION" property="relation" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="WORK_SCHOOL" property="workSchool" jdbcType="VARCHAR"/>
+    <result column="INDUSTRAY" property="industray" jdbcType="VARCHAR"/>
+    <result column="RETURN_STATE" property="returnState" jdbcType="VARCHAR"/>
+    <result column="RETURN_TIME" property="returnTime" jdbcType="DATE"/>
+    <result column="RETURN_WAY" property="returnWay" jdbcType="VARCHAR"/>
+    <result column="RETURN_CARNUM" property="returnCarnum" jdbcType="VARCHAR"/>
+    <result column="EXP_RETURN_TIME" property="expReturnTime" jdbcType="DATE"/>
+    <result column="EXP_RETURN_WAY" property="expReturnWay" jdbcType="VARCHAR"/>
+    <result column="EXP_RETURN_CARNUM" property="expReturnCarnum" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_PBM" property="beforeReturnPbm" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_CBM" property="beforeReturnCbm" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_XBM" property="beforeReturnXbm" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_ADDRESS" property="beforeReturnAddress" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_PBM" property="afterReturnPbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_CBM" property="afterReturnCbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_XBM" property="afterReturnXbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_ZBM" property="afterReturnZhbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_CUBM" property="afterReturnCubm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_ADDRESS" property="afterReturnAddress" jdbcType="VARCHAR"/>
+    <result column="LOCAL_STATE" property="localState" jdbcType="VARCHAR"/>
+    <result column="NAT_TIME" property="natTime" jdbcType="DATE"/>
+    <result column="NAT_RESULT" property="natResult" jdbcType="VARCHAR"/>
+    <result column="TOUCH_STATE" property="touchState" jdbcType="VARCHAR"/>
+    <result column="ISOLATE_STATE" property="isLateStete" jdbcType="VARCHAR"/>
+    <result column="ISOLATE_START_TIME" property="isLateStateTime" jdbcType="DATE"/>
+    <result column="HEALTH_STATE" property="healthState" jdbcType="VARCHAR"/>
+    <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+
+    <result column="CREATE_ACCOUNT" property="createAccount" jdbcType="VARCHAR"/>
+
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"/>
+    <result column="UPDATE_ACCOUNT" property="updateAccount" jdbcType="VARCHAR"/>
+    <result column="RISK_LEVEL" property="riskLevel" jdbcType="VARCHAR"/>
+    <result column="BIRTHDAY" property="birthday" jdbcType="DATE"/>
+    <!-- <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+     <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+     <result column="ROLE_ID" property="roleId" jdbcType="DECIMAL"/>-->
+  </resultMap>
+
+
+  <!-- 字段与实体的映射 -->
+  <resultMap id="BaseResultMap2" type="com.hengtianyi.dims.service.entity.YqfkRegisterView">
+    <id column="ID" property="id" jdbcType="CHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="SEX" property="sex" jdbcType="VARCHAR"/>
+    <result column="AGE" property="age" jdbcType="VARCHAR"/>
+    <result column="CARD" property="card" jdbcType="VARCHAR"/>
+    <result column="HJ_PBM" property="hjPbm" jdbcType="VARCHAR"/>
+    <result column="HJ_CBM" property="hjCbm" jdbcType="VARCHAR"/>
+    <result column="HJ_XBM" property="hjXbm" jdbcType="VARCHAR"/>
+    <result column="HJ" property="hj" jdbcType="VARCHAR"/>
+    <result column="SFCZ" property="sfcz" jdbcType="VARCHAR"/>
+    <result column="RELATION" property="relation" jdbcType="VARCHAR"/>
+    <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+    <result column="WORK_SCHOOL" property="workSchool" jdbcType="VARCHAR"/>
+    <result column="INDUSTRAY" property="industray" jdbcType="VARCHAR"/>
+    <result column="RETURN_STATE" property="returnState" jdbcType="VARCHAR"/>
+    <result column="RETURN_TIME" property="returnTime" jdbcType="DATE"/>
+    <result column="RETURN_WAY" property="returnWay" jdbcType="VARCHAR"/>
+    <result column="RETURN_CARNUM" property="returnCarnum" jdbcType="VARCHAR"/>
+    <result column="EXP_RETURN_TIME" property="expReturnTime" jdbcType="DATE"/>
+    <result column="EXP_RETURN_WAY" property="expReturnWay" jdbcType="VARCHAR"/>
+    <result column="EXP_RETURN_CARNUM" property="expReturnCarnum" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_PBM" property="beforeReturnPbm" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_CBM" property="beforeReturnCbm" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_XBM" property="beforeReturnXbm" jdbcType="VARCHAR"/>
+    <result column="BEFORE_RETURN_ADDRESS" property="beforeReturnAddress" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_PBM" property="afterReturnPbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_CBM" property="afterReturnCbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_XBM" property="afterReturnXbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_ZBM" property="afterReturnZhbm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_CUBM" property="afterReturnCubm" jdbcType="VARCHAR"/>
+    <result column="AFTER_RETURN_ADDRESS" property="afterReturnAddress" jdbcType="VARCHAR"/>
+    <result column="LOCAL_STATE" property="localState" jdbcType="VARCHAR"/>
+    <result column="NAT_TIME" property="natTime" jdbcType="DATE"/>
+    <result column="NAT_RESULT" property="natResult" jdbcType="VARCHAR"/>
+    <result column="TOUCH_STATE" property="touchState" jdbcType="VARCHAR"/>
+    <result column="ISOLATE_STATE" property="isLateStete" jdbcType="VARCHAR"/>
+    <result column="ISOLATE_START_TIME" property="isLateStateTime" jdbcType="DATE"/>
+    <result column="HEALTH_STATE" property="healthState" jdbcType="VARCHAR"/>
+    <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+
+    <result column="CREATE_ACCOUNT" property="createAccount" jdbcType="VARCHAR"/>
+
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"/>
+    <result column="UPDATE_ACCOUNT" property="updateAccount" jdbcType="VARCHAR"/>
+    <result column="RISK_LEVEL" property="riskLevel" jdbcType="VARCHAR"/>
+    <result column="BIRTHDAY" property="birthday" jdbcType="DATE"/>
+    <!-- <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+     <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+     <result column="ROLE_ID" property="roleId" jdbcType="DECIMAL"/>-->
+  </resultMap>
+
+
+  <!-- 字段集合 -->
+  <sql id="Base_Column_List">
+      "ID" , "NAME" , "SEX", "AGE", "CARD","HJ_PBM" , "HJ_CBM", "HJ_XBM" , "HJ" , "SFCZ", "RELATION" , "PHONE", "WORK_SCHOOL", "INDUSTRAY", "RETURN_STATE",
+ "RETURN_TIME", "RETURN_WAY", "RETURN_CARNUM", "EXP_RETURN_TIME", "EXP_RETURN_WAY", "EXP_RETURN_CARNUM", "BEFORE_RETURN_ADDRESS", "AFTER_RETURN_ADDRESS",
+  "LOCAL_STATE", "NAT_TIME", "NAT_RESULT", "TOUCH_STATE", "ISOLATE_STATE", "ISOLATE_START_TIME", "HEALTH_STATE", "REMARK",
+  "BEFORE_RETURN_PBM","BEFORE_RETURN_CBM","BEFORE_RETURN_XBM","AFTER_RETURN_PBM","AFTER_RETURN_CBM","AFTER_RETURN_XBM","AFTER_RETURN_ZBM","AFTER_RETURN_CUBM",
+    "CREATE_ACCOUNT", "CREATE_TIME", "UPDATE_TIME", "UPDATE_ACCOUNT","RISK_LEVEL","BIRTHDAY"
+  </sql>
+
+  <!-- 根据主键查询 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from "YQ_YQFK" where "ID" = #{id,jdbcType=CHAR} and rownum &lt;= 1
+  </select>
+
+  <!-- 根据条件查询，总数 -->
+  <select id="searchDataCount" resultType="java.lang.Integer"
+    parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    select count(1) from "YQ_YQFK"
+    <include refid="sql_where"/>
+  </select>
+
+  <!-- 根据条件查询，分页 -->
+  <select id="searchData" resultMap="BaseResultMap"
+    parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    <choose>
+      <when test="orderSql !=''">
+        select
+        "ID" , "NAME" , "SEX", "AGE", "CARD", "PHONE", "WORK_SCHOOL", "INDUSTRAY", "RETURN_STATE",
+        "CREATE_TIME","RISK_LEVEL", CREATE_ACCOUNT,EXP_RETURN_WAY,RETURN_WAY
+        from (select ROWNUM as "ROW_ID",
+        "ID" , "NAME" , "SEX", "AGE", "CARD", "PHONE", "WORK_SCHOOL", "INDUSTRAY", "RETURN_STATE",
+        "CREATE_TIME","RISK_LEVEL", CREATE_ACCOUNT,EXP_RETURN_WAY,RETURN_WAY
+        from (select
+        Y."ID" , Y."NAME" , Y."SEX", Y."AGE", Y."CARD", Y."PHONE", Y."WORK_SCHOOL", Y."INDUSTRAY", Y."RETURN_STATE",
+    Y."CREATE_TIME",Y."RISK_LEVEL",S."USER_NAME" AS CREATE_ACCOUNT,Y.EXP_RETURN_WAY,Y.RETURN_WAY
+        from "YQ_YQFK" Y
+        LEFT JOIN "SYS_USER" S
+        ON Y.CREATE_ACCOUNT = S.ID
+        <include refid="sql_where"/>
+        order by ${orderSql})
+        where ROWNUM &lt;= #{pager.end}) "PAGINATION"
+        where "PAGINATION"."ROW_ID" &gt;= #{pager.first}
+      </when>
+      <otherwise>
+        select
+        <include refid="Base_Column_List"/>
+        from (select ROWNUM as "ROW_ID",
+        <include refid="Base_Column_List"/>
+        from "YQ_YQFK"
+        <include refid="sql_where"/>
+        and ROWNUM &lt;= #{pager.end}) "PAGINATION"
+        where "PAGINATION"."ROW_ID" &gt;= #{pager.first}
+      </otherwise>
+    </choose>
+  </select>
+
+  <sql id="Base_Column_List2">
+    "ID" , "NAME" , "SEX", "AGE", "CARD","HJ_PBM" , "HJ_CBM", "HJ_XBM" , "HJ" , "SFCZ", "RELATION" , "PHONE", "WORK_SCHOOL", "INDUSTRAY", "RETURN_STATE",
+    "RETURN_TIME", "RETURN_WAY", "RETURN_CARNUM", "EXP_RETURN_TIME", "EXP_RETURN_WAY", "EXP_RETURN_CARNUM", "BEFORE_RETURN_ADDRESS", "AFTER_RETURN_ADDRESS",
+    "LOCAL_STATE", "NAT_TIME", "NAT_RESULT", "TOUCH_STATE", "ISOLATE_STATE", "ISOLATE_START_TIME", "HEALTH_STATE", "REMARK",
+    "BEFORE_RETURN_PBM","BEFORE_RETURN_CBM","BEFORE_RETURN_XBM","AFTER_RETURN_PBM","AFTER_RETURN_CBM","AFTER_RETURN_XBM","AFTER_RETURN_ZBM","AFTER_RETURN_CUBM",
+    "CREATE_ACCOUNT", "CREATE_TIME", "UPDATE_TIME", "UPDATE_ACCOUNT","RISK_LEVEL","BIRTHDAY","CREATE_TIME" as "CREATE_TIME_UNIX"
+  </sql>
+  <!-- 根据条件查询，全部 -->
+  <select id="searchAllData" resultMap="BaseResultMap"
+    parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    select
+    <include refid="Base_Column_List2"/>
+    from "YQ_YQFK"
+    <include refid="sql_where"/>
+    order by CREATE_TIME DESC
+  </select>
+
+  <!-- 单条删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from "YQ_YQFK" where "ID" = #{id,jdbcType=CHAR}
+  </delete>
+
+  <!-- 多条删除 -->
+  <delete id="deleteByIds" parameterType="java.util.List">
+    delete from "YQ_YQFK" where "ID" in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <!-- 选择性删除，根据实际情况，对where条件进行删减 -->
+  <delete id="deleteSelective"
+    parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    delete from "YQ_YQFK"
+    <include refid="sql_where"/>
+  </delete>
+
+  <!-- 添加 -->
+  <insert id="insert" parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    insert into "YQ_YQFK" ("ID" , "NAME" , "SEX", "AGE") values (#{id,jdbcType=CHAR} , #{name,jdbcType=VARCHAR} , #{sex,jdbcType=VARCHAR},#{age,jdbcType=VARCHAR})
+  </insert>
+
+  <!-- 选择性添加 -->
+  <insert id="insertSelective"
+    parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    insert into "YQ_YQFK"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null and id !=''">
+        "ID",
+      </if>
+      <if test="name != null and name !=''">
+        "NAME",
+      </if>
+      <if test="sex != null and sex !=''">
+        "SEX",
+      </if>
+      <if test="age != null and age !=''">
+        "AGE",
+      </if>
+      <if test="card != null and card !=''">
+        "CARD",
+      </if>
+      <if test="hjPbm != null and hjPbm !=''">
+        "HJ_PBM",
+      </if>
+      <if test="hjCbm != null and hjCbm !=''">
+        "HJ_CBM",
+      </if>
+      <if test="hjXbm != null and hjXbm !=''">
+        "HJ_XBM",
+      </if>
+      <if test="hj != null and hj !=''">
+        "HJ",
+      </if>
+      <if test="sfcz != null and sfcz !=''">
+        "SFCZ",
+      </if>
+      <if test="relation != null and relation !=''">
+        "RELATION",
+      </if>
+      <if test="phone != null and phone !=''">
+        "PHONE",
+      </if>
+      <if test="workSchool != null and workSchool !=''">
+        "WORK_SCHOOL",
+      </if>
+      <if test="industray != null and industray !=''">
+        "INDUSTRAY",
+      </if>
+      <if test="returnState != null and returnState !=''">
+        "RETURN_STATE",
+      </if>
+      <if test="returnTime != null">
+        "RETURN_TIME",
+      </if>
+      <if test="returnWay != null and returnWay !=''">
+        "RETURN_WAY",
+      </if>
+      <if test="returnCarnum != null and returnCarnum !=''">
+        "RETURN_CARNUM",
+      </if>
+      <if test="expReturnTime != null">
+        "EXP_RETURN_TIME",
+      </if>
+      <if test="expReturnWay != null and expReturnWay !=''">
+        "EXP_RETURN_WAY",
+      </if>
+      <if test="expReturnCarnum != null and expReturnCarnum !=''">
+       "EXP_RETURN_CARNUM",
+      </if>
+      <if test="beforeReturnPbm != null and beforeReturnPbm !=''">
+        "BEFORE_RETURN_PBM",
+      </if>
+      <if test="beforeReturnCbm != null and beforeReturnCbm !=''">
+        "BEFORE_RETURN_CBM",
+      </if>
+      <if test="beforeReturnXbm != null and beforeReturnXbm !=''">
+        "BEFORE_RETURN_XBM",
+      </if>
+      <if test="beforeReturnAddress != null and beforeReturnAddress !=''">
+        "BEFORE_RETURN_ADDRESS",
+      </if>
+      <if test="afterReturnPbm != null and afterReturnPbm !=''">
+        "AFTER_RETURN_PBM",
+      </if>
+      <if test="afterReturnCbm != null and afterReturnCbm !=''">
+        "AFTER_RETURN_CBM",
+      </if>
+      <if test="afterReturnXbm != null and afterReturnXbm!='' ">
+        "AFTER_RETURN_XBM",
+      </if>
+      <if test="afterReturnZhbm != null and afterReturnZhbm !=''">
+        "AFTER_RETURN_ZBM",
+      </if>
+      <if test="afterReturnCubm != null and afterReturnCubm !=''">
+        "AFTER_RETURN_CUBM",
+      </if>
+      <if test="afterReturnAddress != null and afterReturnAddress !=''">
+        "AFTER_RETURN_ADDRESS",
+      </if>
+      <if test="localState != null and localState !=''">
+        "LOCAL_STATE",
+      </if>
+      <if test="natTime != null">
+        "NAT_TIME",
+      </if>
+      <if test="natResult != null and natResult !=''">
+        "NAT_RESULT",
+      </if>
+      <if test="touchState != null and touchState !=''">
+        "TOUCH_STATE",
+      </if>
+      <if test="isLateStete != null and isLateStete !=''">
+        "ISOLATE_STATE",
+      </if>
+      <if test="isLateStateTime != null">
+        "ISOLATE_START_TIME",
+      </if>
+      <if test="healthState != null and healthState !=''">
+        "HEALTH_STATE",
+      </if>
+      <if test="remark != null and remark !=''">
+        "REMARK",
+      </if>
+      <if test="createAccount != null and createAccount !=''">
+        "CREATE_ACCOUNT",
+      </if>
+      <if test="createTime != null">
+        "CREATE_TIME",
+      </if>
+      <if test="updateTime != null">
+        "UPDATE_TIME",
+      </if>
+      <if test="updateAccount != null and updateAccount !=''">
+        "UPDATE_ACCOUNT",
+      </if>
+      <if test="riskLevel != null and riskLevel !=''">
+        "RISK_LEVEL",
+      </if>
+      <if test="birthday != null ">
+        "BIRTHDAY",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null and id !=''">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="name != null and name !=''">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null and sex !=''">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null and age !=''">
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="card != null and card !=''">
+        #{card,jdbcType=VARCHAR},
+      </if>
+      <if test="hjPbm != null and hjPbm !=''">
+        #{hjPbm,jdbcType=VARCHAR},
+      </if>
+      <if test="hjCbm != null and hjCbm !=''">
+        #{hjCbm,jdbcType=VARCHAR},
+      </if>
+      <if test="hjXbm != null and hjXbm !=''">
+        #{hjXbm,jdbcType=VARCHAR},
+      </if>
+      <if test="hj != null and hj !=''">
+        #{hj,jdbcType=VARCHAR},
+      </if>
+      <if test="sfcz != null and sfcz !=''">
+        #{sfcz,jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null and relation !=''">
+        #{relation,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null and phone !=''">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="workSchool != null and workSchool !=''">
+        #{workSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="industray != null and industray !=''">
+        #{industray,jdbcType=VARCHAR},
+      </if>
+      <if test="returnState != null and returnState !=''">
+        #{returnState,jdbcType=VARCHAR},
+      </if>
+      <if test="returnTime != null">
+        #{returnTime,jdbcType=DATE},
+      </if>
+      <if test="returnWay != null and returnWay !=''">
+        #{returnWay,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCarnum != null and returnCarnum !=''">
+        #{returnCarnum,jdbcType=VARCHAR},
+      </if>
+      <if test="expReturnTime != null">
+        #{expReturnTime,jdbcType=DATE},
+      </if>
+      <if test="expReturnWay != null and expReturnWay !=''">
+        #{expReturnWay,jdbcType=VARCHAR},
+      </if>
+      <if test="expReturnCarnum != null and expReturnCarnum !=''">
+        #{expReturnCarnum,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnPbm != null and beforeReturnPbm !=''">
+        #{beforeReturnPbm,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnCbm != null and beforeReturnCbm !=''">
+        #{beforeReturnCbm,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnXbm != null and beforeReturnXbm !=''">
+        #{beforeReturnXbm,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnAddress != null and beforeReturnAddress !=''">
+        #{beforeReturnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnPbm != null and afterReturnPbm !=''">
+        #{afterReturnPbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnCbm != null and afterReturnCbm !=''">
+        #{afterReturnCbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnXbm != null and afterReturnXbm!='' ">
+        #{afterReturnXbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnZhbm != null and afterReturnZhbm !=''">
+        #{afterReturnZhbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnCubm != null and afterReturnCubm !=''">
+        #{afterReturnCubm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnAddress != null and afterReturnAddress !=''">
+        #{afterReturnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="localState != null and localState !=''">
+        #{localState,jdbcType=VARCHAR},
+      </if>
+      <if test="natTime != null">
+        #{natTime,jdbcType=DATE},
+      </if>
+      <if test="natResult != null and natResult !=''">
+        #{natResult,jdbcType=VARCHAR},
+      </if>
+      <if test="touchState != null and touchState !=''">
+        #{touchState,jdbcType=VARCHAR},
+      </if>
+      <if test="isLateStete != null and isLateStete !=''">
+        #{isLateStete,jdbcType=VARCHAR},
+      </if>
+      <if test="isLateStateTime != null">
+        #{isLateStateTime,jdbcType=DATE},
+      </if>
+      <if test="healthState != null and healthState !=''">
+        #{healthState,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null and remark !=''">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createAccount != null and createAccount !=''">
+        #{createAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="updateAccount != null and updateAccount !=''">
+        #{updateAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="riskLevel != null and riskLevel !=''">
+        #{riskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null ">
+        #{birthday,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!-- 全部更新 -->
+  <update id="updateByPrimaryKey"
+    parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    update "YQ_YQFK" set
+      "NAME" = #{name,jdbcType=VARCHAR} , "SEX" = #{sex,jdbcType=VARCHAR} /*, "CREATE_TIME" = #{createTime,jdbcType=TIMESTAMP}*/
+    where "ID" = #{id,jdbcType=CHAR}
+  </update>
+
+  <!-- 选择性更新 -->
+  <update id="updateByPrimaryKeySelective"
+    parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity">
+    update "YQ_YQFK"
+    <set>
+      <if test="name != null">
+        "NAME" = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        "SEX" = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null and age !=''">
+        "AGE" = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="card != null and card !=''">
+        "CARD" = #{card,jdbcType=VARCHAR},
+      </if>
+      <if test="hjPbm != null and hjPbm !=''">
+        "HJ_PBM" = #{hjPbm,jdbcType=VARCHAR},
+      </if>
+      <if test="hjCbm != null and hjCbm !=''">
+        "HJ_CBM" = #{hjCbm,jdbcType=VARCHAR},
+      </if>
+      <if test="hjXbm != null and hjXbm !=''">
+        "HJ_XBM"= #{hjXbm,jdbcType=VARCHAR},
+      </if>
+      <if test="hj != null and hj !=''">
+        "HJ" =#{hj,jdbcType=VARCHAR},
+      </if>
+      <if test="sfcz != null and sfcz !=''">
+        "SFCZ" =#{sfcz,jdbcType=VARCHAR},
+      </if>
+      <if test="relation != null and relation !=''">
+        "RELATION"= #{relation,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null and phone !=''">
+        "PHONE"=#{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="workSchool != null and workSchool !=''">
+        "WORK_SCHOOL"=#{workSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="industray != null and industray !=''">
+        "INDUSTRAY"=#{industray,jdbcType=VARCHAR},
+      </if>
+      <if test="returnState != null and returnState !=''">
+        "RETURN_STATE" =#{returnState,jdbcType=VARCHAR},
+      </if>
+      <if test="returnTime != null">
+        "RETURN_TIME" =#{returnTime,jdbcType=DATE},
+      </if>
+      <if test="returnWay != null and returnWay !=''">
+        "RETURN_WAY"=#{returnWay,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCarnum != null and returnCarnum !=''">
+        "RETURN_CARNUM"=#{returnCarnum,jdbcType=VARCHAR},
+      </if>
+      <if test="expReturnTime != null">
+        "EXP_RETURN_TIME"=#{expReturnTime,jdbcType=DATE},
+      </if>
+      <if test="expReturnWay != null and expReturnWay !=''">
+        "EXP_RETURN_WAY"= #{expReturnWay,jdbcType=VARCHAR},
+      </if>
+      <if test="expReturnCarnum != null and expReturnCarnum !=''">
+        "EXP_RETURN_CARNUM"= #{expReturnCarnum,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnPbm != null and beforeReturnPbm !=''">
+        "BEFORE_RETURN_PBM"= #{beforeReturnPbm,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnCbm != null and beforeReturnCbm !=''">
+        "BEFORE_RETURN_CBM"= #{beforeReturnCbm,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnXbm != null and beforeReturnXbm !=''">
+        "BEFORE_RETURN_XBM"= #{beforeReturnXbm,jdbcType=VARCHAR},
+      </if>
+      <if test="beforeReturnAddress != null and beforeReturnAddress !=''">
+        "BEFORE_RETURN_ADDRESS" =  #{beforeReturnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnPbm != null and afterReturnPbm !=''">
+        "AFTER_RETURN_PBM" = #{afterReturnPbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnCbm != null and afterReturnCbm !=''">
+        "AFTER_RETURN_CBM" = #{afterReturnCbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnXbm != null and afterReturnXbm!='' ">
+        "AFTER_RETURN_XBM"=  #{afterReturnXbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnZhbm != null and afterReturnZhbm !=''">
+        "AFTER_RETURN_ZBM" =#{afterReturnZhbm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnCubm != null and afterReturnCubm !=''">
+        "AFTER_RETURN_CUBM"= #{afterReturnCubm,jdbcType=VARCHAR},
+      </if>
+      <if test="afterReturnAddress != null and afterReturnAddress !=''">
+        "AFTER_RETURN_ADDRESS"= #{afterReturnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="localState != null and localState !=''">
+        "LOCAL_STATE"=#{localState,jdbcType=VARCHAR},
+      </if>
+      <if test="natTime != null">
+        "NAT_TIME"= #{natTime,jdbcType=DATE},
+      </if>
+      <if test="natResult != null and natResult !=''">
+        "NAT_RESULT"= #{natResult,jdbcType=VARCHAR},
+      </if>
+      <if test="touchState != null and touchState !=''">
+        "TOUCH_STATE"= #{touchState,jdbcType=VARCHAR},
+      </if>
+      <if test="isLateStete != null and isLateStete !=''">
+        "ISOLATE_STATE"=#{isLateStete,jdbcType=VARCHAR},
+      </if>
+      <if test="isLateStateTime != null">
+        "ISOLATE_START_TIME"= #{isLateStateTime,jdbcType=DATE},
+      </if>
+      <if test="healthState != null and healthState !=''">
+        "HEALTH_STATE"= #{healthState,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null and remark !=''">
+        "REMARK"= #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createAccount != null and createAccount !=''">
+        "CREATE_ACCOUNT"=#{createAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        "CREATE_TIME"= #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        "UPDATE_TIME" = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAccount != null and updateAccount !=''">
+        "UPDATE_ACCOUNT"= #{updateAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="riskLevel != null and riskLevel !=''">
+        "RISK_LEVEL"= #{riskLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null ">
+        "BIRTHDAY"= #{birthday,jdbcType=DATE},
+      </if>
+    </set>
+    where "ID" = #{id,jdbcType=CHAR}
+  </update>
+
+  <!--分页-->
+  <select id="pagelist" resultMap="BaseResultMap"
+    parameterType="com.hengtianyi.dims.service.dto.QueryDto">
+    select
+     p."ID" , p."NAME" , p."SEX", p."AGE", p."CARD",p."HJ_PBM" , p."HJ_CBM", p."HJ_XBM" , p."HJ" , p."SFCZ", p."RELATION" , p."PHONE", p."WORK_SCHOOL", p."INDUSTRAY", p."RETURN_STATE",
+    p."RETURN_TIME", p."RETURN_WAY", p."RETURN_CARNUM", p."EXP_RETURN_TIME", p."EXP_RETURN_WAY", p."EXP_RETURN_CARNUM", p."BEFORE_RETURN_ADDRESS", p."AFTER_RETURN_ADDRESS",
+    p."LOCAL_STATE", p."NAT_TIME", p."NAT_RESULT", p."TOUCH_STATE", p."ISOLATE_STATE", p."ISOLATE_START_TIME", p."HEALTH_STATE", p."REMARK",
+    p."BEFORE_RETURN_PBM",p."BEFORE_RETURN_CBM",p."BEFORE_RETURN_XBM",p."AFTER_RETURN_PBM",p."AFTER_RETURN_CBM",p."AFTER_RETURN_XBM",p."AFTER_RETURN_ZBM",p."AFTER_RETURN_CUBM",
+    p."CREATE_ACCOUNT", p."CREATE_TIME", p."UPDATE_TIME", p."UPDATE_ACCOUNT",p."RISK_LEVEL" ,p."BIRTHDAY"
+    from (select ROWNUM as "ROW_ID",
+    <include refid="Base_Column_List"/>
+    from (select t.* from "YQ_YQFK" t
+    <include refid="page_where"/>
+    order by t.update_time desc)
+    where ROWNUM &lt;= #{dto.end}) p
+    where p."ROW_ID" &gt; #{dto.first}
+  </select>
+
+  <select id="pagecount" resultType="java.lang.Integer"
+    parameterType="com.hengtianyi.dims.service.dto.QueryDto">
+    select count(1) from "YQ_YQFK" t   <include refid="page_where"/>
+    <!--<if test="dto.areaCode!=null and dto.areaCode !=''">
+      and t."USER_ID" in (select a.id from sys_user a
+      where a.area_code like (#{dto.areaCode,jdbcType=VARCHAR} ||'%'))
+    </if>-->
+  </select>
+
+
+  <select id="getEchartsDataStatus" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    t."ID" , t."RETURN_STATE"
+    from "YQ_YQFK" t
+    where 1=1
+    <choose>
+      <when test="endTime!=null and endTime!=''">
+        and t."CREATE_TIME" >= to_date(#{startTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+        and t."CREATE_TIME" &lt; to_date(#{endTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      </when>
+      <otherwise>
+        and t."CREATE_TIME" &lt; sysdate
+      </otherwise>
+    </choose>
+    <if test="areaCode!=null and areaCode!=''">
+      and t."CREATE_ACCOUNT" in (select a.id from sys_user a where a.area_code like
+      (#{areaCode,jdbcType=VARCHAR} ||'%'))
+    </if>
+  </select>
+
+
+
+  <select id="getEchartsDataVehicle" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    t."ID" , t."RETURN_WAY",  t."EXP_RETURN_WAY", t."RETURN_STATE"
+    from "YQ_YQFK" t
+    where 1=1
+    <choose>
+      <when test="endTime!=null and endTime!=''">
+        and t."CREATE_TIME" >= to_date(#{startTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+        and t."CREATE_TIME" &lt; to_date(#{endTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      </when>
+      <otherwise>
+        and t."CREATE_TIME" &lt; sysdate
+      </otherwise>
+    </choose>
+    <if test="areaCode!=null and areaCode!=''">
+      and t."CREATE_ACCOUNT" in (select a.id from sys_user a where a.area_code like
+      (#{areaCode,jdbcType=VARCHAR} ||'%'))
+    </if>
+    <if test="returnState !=null and returnState!='' ">
+      and t."RETURN_STATE" = #{returnState,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="getEchartsDataIndustry" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    t."ID" , t."INDUSTRAY", t."RETURN_STATE"
+    from "YQ_YQFK" t
+    where 1=1
+    <choose>
+      <when test="endTime!=null and endTime!=''">
+        and t."CREATE_TIME" >= to_date(#{startTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+        and t."CREATE_TIME" &lt; to_date(#{endTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      </when>
+      <otherwise>
+        and t."CREATE_TIME" &lt; sysdate
+      </otherwise>
+    </choose>
+    <if test="areaCode!=null and areaCode!=''">
+      and t."CREATE_ACCOUNT" in (select a.id from sys_user a where a.area_code like
+      (#{areaCode,jdbcType=VARCHAR} ||'%'))
+    </if>
+    <if test="returnState !=null and returnState!='' ">
+      and t."RETURN_STATE" = #{returnState,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+
+  <select id="getEchartsDataRisk" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    t."ID" , t."RISK_LEVEL", t."RETURN_STATE"
+    from "YQ_YQFK" t
+    where 1=1
+    <choose>
+      <when test="endTime!=null and endTime!=''">
+        and t."CREATE_TIME" >= to_date(#{startTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+        and t."CREATE_TIME" &lt; to_date(#{endTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      </when>
+      <otherwise>
+        and t."CREATE_TIME" &lt; sysdate
+      </otherwise>
+    </choose>
+    <if test="areaCode!=null and areaCode!=''">
+      and t."CREATE_ACCOUNT" in (select a.id from sys_user a where a.area_code like
+      (#{areaCode,jdbcType=VARCHAR} ||'%'))
+    </if>
+    <if test="returnState !=null and returnState!='' ">
+      and t."RETURN_STATE" = #{returnState,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+
+  <select id="checkCard" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from "YQ_YQFK" where CARD=#{card,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="getEchartsDataBefore" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    t."ID" , t."BEFORE_RETURN_PBM", t."RETURN_STATE"
+    from "YQ_YQFK" t
+    where 1=1
+    <choose>
+      <when test="endTime!=null and endTime!=''">
+        and t."CREATE_TIME" >= to_date(#{startTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+        and t."CREATE_TIME" &lt; to_date(#{endTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      </when>
+      <otherwise>
+        and t."CREATE_TIME" &lt; sysdate
+      </otherwise>
+    </choose>
+    <if test="areaCode!=null and areaCode!=''">
+      and t."CREATE_ACCOUNT" in (select a.id from sys_user a where a.area_code like
+      (#{areaCode,jdbcType=VARCHAR} ||'%'))
+    </if>
+    <if test="beforeAreaPbm!=null and beforeAreaPbm!=''">
+      and t."BEFORE_RETURN_PBM" = #{beforeAreaPbm,jdbcType=VARCHAR}
+    </if>
+    <if test="beforeAreaCbm!=null and beforeAreaCbm!=''">
+      and t."BEFORE_RETURN_CBM" = #{beforeAreaCbm,jdbcType=VARCHAR}
+    </if>
+    <if test="beforeAreaXbm!=null and beforeAreaXbm!=''">
+      and t."BEFORE_RETURN_XBM" = #{beforeAreaXbm,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="getRiskCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(1) from YQ_YQFK where create_account = #{userId,jdbcType=VARCHAR} and risk_Level!=0
+  </select>
+  <select id="getExpCount" parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity" resultType="java.lang.Integer">
+    select count(1) from YQ_YQFK where CREATE_ACCOUNT = #{entity.createAccount,jdbcType=VARCHAR} and EXP_RETURN_TIME = TO_DATE(#{entity.beforeReturnAddress,jdbcType=VARCHAR},'yyyy-mm-dd')
+  </select>
+  <sql id="page_where">
+    <where>
+      <choose>
+        <when test="dto.userId != null and dto.userId != ''">
+          <if test="dto.roleId == 3000"><!--乡镇管理员-->
+            and t."CREATE_ACCOUNT" in (
+            select s.id from sys_user s where s.area_code like (#{dto.areaCode,jdbcType=CHAR} ||'%'))
+          </if>
+          <if test="dto.roleId==1001"> <!--网格员，只能查看自己的-->
+            and t."CREATE_ACCOUNT" = #{dto.userId,jdbcType=CHAR}
+          </if>
+        </when>
+        <otherwise>
+            <!--暂时空-->
+        </otherwise>
+      </choose>
+      <!--添加按照返回状态分类，借用地区编码来做    and t."RISK_LEVEL" != 0-->
+      <if test="dto.returnState !=null">
+        and t."RETURN_STATE" = #{dto.returnState,jdbcType=VARCHAR}
+      </if>
+      <if test="dto.riskLevel !=null"> <!--不为0，表示要取的是全部信息，只要有风险的都取出来-->
+        and t."RISK_LEVEL" = #{dto.riskLevel,jdbcType=VARCHAR}
+      </if>
+      <if test="dto.name !=null"> <!--不为-->
+        and t."NAME" like (#{dto.name,jdbcType=VARCHAR} ||'%'))
+      </if>
+
+    </where>
+  </sql>
+  <select id="getCount" parameterType="com.hengtianyi.dims.service.entity.YqfkRegisterEntity" resultType="java.lang.Integer">
+    select count(1) from YQ_YQFK where CREATE_ACCOUNT = #{entity.createAccount,jdbcType=VARCHAR} and RETURN_STATE ='拟返乡'
+  </select>
+
+</mapper>
