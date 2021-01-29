@@ -116,7 +116,7 @@
                                         <option value="口岸直接接触进口货物从业人员">口岸直接接触进口货物从业人员</option>
                                         <option value="隔离场所工作人员">隔离场所工作人员</option>
                                         <option value="学生">学生</option>
-                                        <option value="入境隔离期满返乡人员">入境隔离期满返乡人员</option>
+                                        <option value="入境隔离期满返寿人员">入境隔离期满返寿人员</option>
                                         <option value="无业">无业</option>
                                         <option value="其它">其他</option>
                                     </select>
@@ -251,8 +251,11 @@
                     <th data-column-id="phone" data-order="desc" data-visible="true" data-sortable="true">
                         手机号
                     </th>
+                    <th data-column-id="expReturnWay" data-order="desc" data-visible="true" data-sortable="true">
+                        拟返乡交通工具
+                    </th>
                     <th data-column-id="returnWay" data-order="desc" data-visible="true" data-sortable="true">
-                        交通工具
+                        返乡后交通工具
                     </th>
                     <th data-column-id="createAccount" data-order="desc" data-visible="true" data-sortable="true">
                         网格员名字
@@ -547,6 +550,7 @@
         //查询参数这里
         var startTime = $("#startTime").val();
         var endTime = $("#endTime").val();
+        var name = $("#name").val();
         var beforeReturnPbm = $("#beforeReturnPbm").val();
         var beforeReturnCbm = $("#beforeReturnCbm").val();
         var beforeReturnXbm = $("#beforeReturnXbm").val();
@@ -560,13 +564,14 @@
         var industray = $("#industray").val();
         var createBelZhbm = $("#createBelZhbm").val();
         var createBelCubm = $("#createBelCubm").val();
-
-
+        var returnWay = $("#returnWay").val();
+        var returnCarnum = $("#returnCarnum").val();
 
 
         var Param1 = JSON.stringify({
             "startTime": startTime,
             "endTime": endTime,
+            "name": name,
             "beforeReturnPbm": beforeReturnPbm,
             "beforeReturnCbm": beforeReturnCbm,
             "beforeReturnXbm": beforeReturnXbm,
@@ -580,6 +585,8 @@
             "industray": industray,
             "createBelZhbm": createBelZhbm,
             "createBelCubm": createBelCubm,
+            "returnWay": returnWay,
+            "returnCarnum": returnCarnum,
         }); //必须转换为Json对象
 
         $.ajax({

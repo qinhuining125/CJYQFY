@@ -31,7 +31,6 @@
                                 <div class="col-sm-7">
                                     <select name="valid" class="form-control">
                                         <option value="">全部</option>
-                                        <option value="0">无</option>
                                         <option value="1">低风险</option>
                                         <option value="2">中风险</option>
                                         <option value="3">高风险</option>
@@ -43,44 +42,44 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">区域名称:</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="pname" class="form-control" autocomplete="off">
+                                    <input type="text" name="fullname" class="form-control" autocomplete="off">
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-4 col-lg-3">
-<#--                            <input type="hidden" id="province" name="province">-->
-<#--                            <input type="hidden" id="city" name="city">-->
-<#--                            <input type="hidden" id="county" name="county">-->
-<#--                            <div class="form-group">-->
-<#--                                <label class="col-sm-4 control-label">省:</label>-->
-<#--                                <div class="col-sm-7">-->
-<#--                                    <select class="form-control" id="sprovince" name=""-->
-<#--                                            onchange="searchP(this);">-->
-<#--                                        <option value="">全部</option>-->
-<#--                                        <#list areaList as obj>-->
-<#--                                            <option value="${(obj.id)}">${(obj.pname)!}</option>-->
-<#--                                        </#list>-->
-<#--                                    </select>-->
-<#--                                </div>-->
-<#--                            </div>-->
-<#--                            <div class="form-group">-->
-<#--                                <label class="col-sm-4 control-label">市:</label>-->
-<#--                                <div class="col-sm-7">-->
-<#--                                    <select id="scity" class="form-control" name=""-->
-<#--                                            onchange="choseS(this);">-->
-<#--                                        <option value="">全部</option>-->
-<#--                                    </select>-->
-<#--                                </div>-->
-<#--                            </div>-->
-<#--                            <div class="form-group">-->
-<#--                                <label class="col-sm-4 control-label">县:</label>-->
-<#--                                <div class="col-sm-7">-->
-<#--                                    <select id="scounty" class="form-control" name=""-->
-<#--                                            onchange="choseX(this);">-->
-<#--                                        <option value="">全部</option>-->
-<#--                                    </select>-->
-<#--                                </div>-->
-<#--                            </div>-->
+                            <#--                            <input type="hidden" id="province" name="province">-->
+                            <#--                            <input type="hidden" id="city" name="city">-->
+                            <#--                            <input type="hidden" id="county" name="county">-->
+                            <#--                            <div class="form-group">-->
+                            <#--                                <label class="col-sm-4 control-label">省:</label>-->
+                            <#--                                <div class="col-sm-7">-->
+                            <#--                                    <select class="form-control" id="sprovince" name=""-->
+                            <#--                                            onchange="searchP(this);">-->
+                            <#--                                        <option value="">全部</option>-->
+                            <#--                                        <#list areaList as obj>-->
+                            <#--                                            <option value="${(obj.id)}">${(obj.pname)!}</option>-->
+                            <#--                                        </#list>-->
+                            <#--                                    </select>-->
+                            <#--                                </div>-->
+                            <#--                            </div>-->
+                            <#--                            <div class="form-group">-->
+                            <#--                                <label class="col-sm-4 control-label">市:</label>-->
+                            <#--                                <div class="col-sm-7">-->
+                            <#--                                    <select id="scity" class="form-control" name=""-->
+                            <#--                                            onchange="choseS(this);">-->
+                            <#--                                        <option value="">全部</option>-->
+                            <#--                                    </select>-->
+                            <#--                                </div>-->
+                            <#--                            </div>-->
+                            <#--                            <div class="form-group">-->
+                            <#--                                <label class="col-sm-4 control-label">县:</label>-->
+                            <#--                                <div class="col-sm-7">-->
+                            <#--                                    <select id="scounty" class="form-control" name=""-->
+                            <#--                                            onchange="choseX(this);">-->
+                            <#--                                        <option value="">全部</option>-->
+                            <#--                                    </select>-->
+                            <#--                                </div>-->
+                            <#--                            </div>-->
                         </div>
                     </div>
                     <div class="text-center">
@@ -116,8 +115,8 @@
                     <th data-column-id="pname" data-order="desc" data-visible="true" data-sortable="true">
                         名称
                     </th>
-                    <th data-column-id="parent" data-order="desc" data-visible="true" data-sortable="true">
-                        上级编码
+                    <th data-column-id="fullname" data-order="desc" data-visible="true" data-sortable="true">
+                        全称
                     </th>
                     <th data-column-id="plevel" data-order="desc" data-visible="true" data-sortable="true">
                         级别
@@ -188,6 +187,12 @@
             <label class="col-xs-4 control-label">名称：</label>
             <div class="col-xs-8">
                 <div class="form-control-static">{{pname}}</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-4 control-label">全称：</label>
+            <div class="col-xs-8">
+                <div class="form-control-static">{{fullname}}</div>
             </div>
         </div>
         <div class="form-group">
