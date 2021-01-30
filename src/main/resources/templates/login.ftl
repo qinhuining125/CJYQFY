@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="renderer" content="webkit"/>
-  <title>寿阳县疫情防控信息平台</title>
+  <title>柴家镇疫情防控信息平台</title>
   <link href="${global.staticPath!}static/css/login.min.css" rel="stylesheet"/>
   <style>
     .bg {

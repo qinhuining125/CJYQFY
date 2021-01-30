@@ -11,7 +11,7 @@
               <#--<img src="${global.staticPath!}static/img/logos/logo.png"
                    style="border-radius:50%;height:125px;margin-bottom:5px">-->
             <br>
-            <a href="#">寿阳县疫情防控信息平台</a>
+            <a href="#">柴家镇疫情防控信息平台</a>
           </div>
         </div>
         <div class="logo-element">
