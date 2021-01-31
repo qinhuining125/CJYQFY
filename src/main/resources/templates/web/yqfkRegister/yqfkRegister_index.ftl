@@ -116,7 +116,7 @@
                                         <option value="口岸直接接触进口货物从业人员">口岸直接接触进口货物从业人员</option>
                                         <option value="隔离场所工作人员">隔离场所工作人员</option>
                                         <option value="学生">学生</option>
-                                        <option value="入境隔离期满返寿人员">入境隔离期满返寿人员</option>
+                                        <option value="入境隔离期满返乡人员">入境隔离期满返乡人员</option>
                                         <option value="无业">无业</option>
                                         <option value="其它">其他</option>
                                     </select>
