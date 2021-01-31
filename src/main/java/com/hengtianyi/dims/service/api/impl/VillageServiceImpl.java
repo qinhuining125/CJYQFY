@@ -3,6 +3,7 @@ package com.hengtianyi.dims.service.api.impl;
 import com.hengtianyi.common.core.base.service.AbstractGenericServiceImpl;
 import com.hengtianyi.dims.service.api.VillageService;
 import com.hengtianyi.dims.service.dao.VillageDao;
+import com.hengtianyi.dims.service.entity.TownshipEntity;
 import com.hengtianyi.dims.service.entity.VillageEntity;
 import java.util.HashMap;
 import java.util.List;
@@ -95,4 +96,10 @@ public class VillageServiceImpl extends AbstractGenericServiceImpl<VillageEntity
   public List<VillageEntity> areaList2(String areaCode) {
     return villageDao.areaList2(areaCode);
   }
+
+  @Override
+  public VillageEntity findByCode(String pcode){
+    return villageDao.selectByAreaCode(pcode);
+  }
+
 }

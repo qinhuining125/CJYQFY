@@ -3,6 +3,7 @@ package com.hengtianyi.dims.service.api.impl;
 import com.hengtianyi.common.core.base.service.AbstractGenericServiceImpl;
 import com.hengtianyi.dims.service.api.TownshipService;
 import com.hengtianyi.dims.service.dao.TownshipDao;
+import com.hengtianyi.dims.service.entity.Region;
 import com.hengtianyi.dims.service.entity.TownshipEntity;
 import java.util.HashMap;
 import java.util.List;
@@ -82,5 +83,10 @@ public class TownshipServiceImpl extends AbstractGenericServiceImpl<TownshipEnti
   @Override
   public List<TownshipEntity> areaList() {
     return townshipDao.searchAllData(new TownshipEntity());
+  }
+
+  @Override
+  public TownshipEntity findByCode(String pcode){
+    return townshipDao.selectByAreaCode(pcode);
   }
 }

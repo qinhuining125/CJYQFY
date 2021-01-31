@@ -1,6 +1,7 @@
 package com.hengtianyi.dims.service.dao;
 
 import com.hengtianyi.common.core.base.service.AbstractGenericDao;
+import com.hengtianyi.dims.service.entity.TownshipEntity;
 import com.hengtianyi.dims.service.entity.VillageEntity;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
@@ -29,6 +30,8 @@ public interface VillageDao extends AbstractGenericDao<VillageEntity, String> {
    * @return list
    */
   List<VillageEntity> areaList(@Param("areaCode") String areaCode);
+
+  VillageEntity selectByAreaCode(@Param("areaCode") String areaCode);
 
 
 

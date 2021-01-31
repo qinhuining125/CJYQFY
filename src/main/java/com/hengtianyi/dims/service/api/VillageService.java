@@ -1,6 +1,7 @@
 package com.hengtianyi.dims.service.api;
 
 import com.hengtianyi.common.core.base.service.AbstractGenericService;
+import com.hengtianyi.dims.service.entity.TownshipEntity;
 import com.hengtianyi.dims.service.entity.VillageEntity;
 import java.util.List;
 
@@ -28,5 +29,7 @@ public interface VillageService extends AbstractGenericService<VillageEntity, St
   List<VillageEntity> townChilds2(String townCode);
 
   List<VillageEntity> areaList2(String areaCode);
+
+  VillageEntity findByCode(String pcode);
 
 }

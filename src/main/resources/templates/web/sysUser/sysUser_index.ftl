@@ -297,7 +297,7 @@
            return "";
           }else{
             var areaCodeStr = areaCodeVar.substring(0,9);
-            if(areaCodeStr === "140882100"){
+            if(areaCodeStr === "140882201"){
               return  "柴家镇";
             }else if(areaCodeStr === "140725200"){
               return  "平舒乡";
